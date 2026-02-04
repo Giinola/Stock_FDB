@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pkg.gestion_stock.controllers.ProduitController"
+      alignment="TOP_CENTER" spacing="15">
+
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <Label text="Listes des produits" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="tableProduits" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colCategorie" text="Catégorie" prefWidth="200"/>
+            <TableColumn fx:id="colNom" text="Produit" prefWidth="300"/>
+            <TableColumn fx:id="colQuantite" text="Quantité en Stock" prefWidth="150" style="-fx-alignment: CENTER;"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Actualiser" onAction="#actualiser"/>
+    </HBox>
+
+</VBox>
