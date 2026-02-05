@@ -3,8 +3,11 @@ module pkg.stock_fdb {
     requires javafx.fxml;
     requires org.kordamp.bootstrapfx.core;
     requires org.controlsfx.controls;
+    requires java.sql;
 
-    // Ouvre les packages pour JavaFX
+
+
+// Ouvre les packages pour JavaFX
     opens pkg.gestion_stock to javafx.fxml;
     opens pkg.gestion_stock.controllers to javafx.fxml;
     opens pkg.gestion_stock.models to javafx.base;
