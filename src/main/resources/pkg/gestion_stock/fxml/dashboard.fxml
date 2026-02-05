@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+      alignment="TOP_CENTER" spacing="20" style="-fx-background-color: white;">
+
+    <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+    <Label text="🏠 DASHBOARD" style="-fx-font-size: 28; -fx-font-weight: bold;"/>
+
+    <Label text="Bienvenue dans votre gestionnaire de stock !"
+           style="-fx-font-size: 16; -fx-text-fill: #7f8c8d;"/>
+
+    <HBox spacing="20" alignment="CENTER">
+        <VBox alignment="CENTER" spacing="10"
+              style="-fx-background-color: #3498db; -fx-background-radius: 10; -fx-padding: 30;">
+            <Label text="76" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label text="Produits Total" style="-fx-font-size: 14; -fx-text-fill: white;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="10"
+              style="-fx-background-color: #e74c3c; -fx-background-radius: 10; -fx-padding: 30;">
+            <Label text="12" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label text="Stock Bas" style="-fx-font-size: 14; -fx-text-fill: white;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="10"
+              style="-fx-background-color: #2ecc71; -fx-background-radius: 10; -fx-padding: 30;">
+            <Label text="9" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label text="Catégories" style="-fx-font-size: 14; -fx-text-fill: white;"/>
+        </VBox>
+    </HBox>
+
+</VBox>
