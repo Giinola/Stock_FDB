@@ -1,15 +1,13 @@
-package pkg.gestion_stock.controllers;
-
+package pkg.gestion_stock.models;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class Utilisateur {
     private Long id;
     private String username;
-    private String password; // Hash BCrypt
+    private String password;
     private String nom;
     private String prenom;
     private String email;
@@ -19,24 +17,19 @@ public class Utilisateur {
     private LocalDateTime dernierLogin;
     private int tentativesEchec;
     private boolean compteVerrouille;
-    private Set<Role> roles;
 
-    // Constructeurs
     public Utilisateur() {
+    }
+
+    public Utilisateur(String username, String password) {
+        this.username = username;
+        this.password = password;
         this.actif = true;
         this.dateCreation = LocalDateTime.now();
         this.tentativesEchec = 0;
         this.compteVerrouille = false;
-        this.roles = new HashSet<>();
     }
 
-    public Utilisateur(String username, String password) {
-        this();
-        this.username = username;
-        this.password = password;
-    }
-
-    // Getters et Setters
     public Long getId() {
         return id;
     }
@@ -132,64 +125,4 @@ public class Utilisateur {
     public void setCompteVerrouille(boolean compteVerrouille) {
         this.compteVerrouille = compteVerrouille;
     }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    // Méthodes utilitaires
-
-
-    public boolean hasRole(String roleName) {
-        return roles.stream()
-                .anyMatch(role -> role.getNom().equals(roleName));
-    }
-
-
-    public boolean hasPermission(String permissionName) {
-        return roles.stream()
-                .flatMap(role -> role.getPermissions().stream())
-                .anyMatch(perm -> perm.getNom().equals(permissionName));
-    }
-
-
-    public String getNomComplet() {
-        if (nom != null && prenom != null) {
-            return prenom + " " + nom;
-        } else if (nom != null) {
-            return nom;
-        } else if (prenom != null) {
-            return prenom;
-        }
-        return username;
-    }
-
-
-    public void incrementerTentativesEchec() {
-        this.tentativesEchec++;
-        if (this.tentativesEchec >= 5) {
-            this.compteVerrouille = true;
-        }
-    }
-
-
-    public void reinitialiserTentativesEchec() {
-        this.tentativesEchec = 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Utilisateur{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", actif=" + actif +
-                '}';
-    }
-}
 }
