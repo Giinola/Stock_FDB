@@ -38,13 +38,13 @@ public class MenuController {
 
     @FXML
     private void showEntreeStock() {
-        loadView("/pkg/gestion_stock/fxml/entree-stock.fxml");
+        loadView("/pkg/gestion_stock/fxml/entree_stock.fxml");
         setActiveButton(btnEntree);
     }
 
     @FXML
     private void showSortieStock() {
-        loadView("/pkg/gestion_stock/fxml/sortie-stock.fxml");
+        loadView("/pkg/gestion_stock/fxml/sortie_stock.fxml");
         setActiveButton(btnSortie);
     }
 

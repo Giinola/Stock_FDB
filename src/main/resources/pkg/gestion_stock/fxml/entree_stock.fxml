@@ -15,16 +15,36 @@
     <!-- Formulaire -->
     <VBox spacing="15" style="-fx-background-color: #ecf0f1; -fx-padding: 20; -fx-background-radius: 10;">
 
+        <!-- Barre de recherche -->
+        <Label text="🔍 Rechercher un produit :" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+        <TextField fx:id="txtRecherche" promptText="Tapez le nom du produit..." prefWidth="400"/>
+
         <Label text="Sélectionner un produit :" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
         <ComboBox fx:id="comboProduits" promptText="Choisir un produit..." prefWidth="400"/>
+
+        <!-- ✅ AFFICHAGE DU STOCK ACTUEL -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="📦 Stock actuel :" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+            <Label fx:id="lblStockActuel" text="—"
+                   style="-fx-font-size: 18; -fx-text-fill: #3498db; -fx-font-weight: bold;"/>
+        </HBox>
 
         <Label text="Quantité à ajouter :" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
         <TextField fx:id="txtQuantite" promptText="Ex: 10" prefWidth="200"/>
 
+        <!-- ✅ CALCULATEUR DE NOUVEAU STOCK -->
+        <HBox spacing="10" alignment="CENTER_LEFT"
+              style="-fx-background-color: #d5f4e6; -fx-padding: 10; -fx-background-radius: 5;">
+            <Label text="➕" style="-fx-font-size: 16;"/>
+            <Label text="Nouveau stock :" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
+            <Label fx:id="lblNouveauStock" text="—"
+                   style="-fx-font-size: 18; -fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+        </HBox>
+
         <Label text="Motif (optionnel) :" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
         <TextField fx:id="txtMotif" promptText="Ex: Réception fournisseur" prefWidth="400"/>
 
-        <Button text="✅ Ajouter au Stock" onAction="#ajouterEntree"
+        <Button text="Ajouter au Stock" onAction="#ajouterEntree"
                 style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 10 20;"/>
     </VBox>
 
