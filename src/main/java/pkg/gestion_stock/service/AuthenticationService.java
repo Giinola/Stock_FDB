@@ -2,8 +2,7 @@ package pkg.gestion_stock.service;
 
 import pkg.gestion_stock.Database.DatabaseConnection;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,9 +49,8 @@ public class AuthenticationService {
                     return false;
                 }
 
-                String hashedInputPassword = hashPassword(password);
-
-                if (storedPassword.equals(hashedInputPassword)) {
+                // Comparaison directe sans hash
+                if (storedPassword.equals(password)) {
                     System.out.println("Authentification reussie pour : " + username);
 
                     String updateQuery = "UPDATE utilisateur SET dernier_login = CURRENT_TIMESTAMP, tentatives_echec = 0 WHERE username = ?";
@@ -90,27 +88,6 @@ public class AuthenticationService {
             System.err.println("Erreur SQL lors de l'authentification : " + e.getMessage());
             e.printStackTrace();
             return false;
-        }
-    }
-
-    private String hashPassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes());
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            System.err.println("Erreur de hachage : " + e.getMessage());
-            return password;
         }
     }
 
