@@ -38,7 +38,7 @@ public class MenuController {
 
     @FXML
     private void showEntreeStock() {
-        loadView("/pkg/gestion_stock/fxml/entree-stock.fxml");
+        loadView("/pkg/gestion_stock/fxml/entree_stock.fxml");
         setActiveButton(btnEntree);
     }
 
