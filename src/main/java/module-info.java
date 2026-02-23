@@ -15,5 +15,6 @@ module pkg.stock_fdb {
 
     // Exporte les packages
     exports pkg.gestion_stock;
+    exports pkg.gestion_stock.Database;
     exports pkg.stock_fdb;
 }
