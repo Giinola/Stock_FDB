@@ -44,7 +44,7 @@ public class MenuController {
 
     @FXML
     private void showSortieStock() {
-        loadView("/pkg/gestion_stock/fxml/sortie-stock.fxml");
+        loadView("/pkg/gestion_stock/fxml/sortie_stock.fxml");
         setActiveButton(btnSortie);
     }
 

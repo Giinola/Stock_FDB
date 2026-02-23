@@ -2,6 +2,10 @@ package pkg.gestion_stock.models;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pkg.gestion_stock.dao.ProduitDAO;
+import pkg.gestion_stock.dao.MouvementStockDAO;
+
+import java.util.List;
 
 public class StockManager {
 
@@ -10,9 +14,25 @@ public class StockManager {
     private ObservableList<Produit> produits = FXCollections.observableArrayList();
     private ObservableList<Mouvement> mouvements = FXCollections.observableArrayList();
 
-    // Singleton
+    // ✅ DAO
+    private ProduitDAO produitDAO;
+    private MouvementStockDAO mouvementDAO;
+
     private StockManager() {
-        chargerProduits();
+        System.out.println("🔧 Initialisation de StockManager...");
+
+        // Initialiser les DAO
+        produitDAO = new ProduitDAO();
+        mouvementDAO = new MouvementStockDAO();
+
+        // Créer les tables
+        produitDAO.creerTable();
+        mouvementDAO.creerTable();
+
+        // Charger les données
+        chargerDepuisBaseDeDonnees();
+
+        System.out.println("✅ StockManager initialisé avec " + produits.size() + " produits");
     }
 
     public static StockManager getInstance() {
@@ -22,8 +42,27 @@ public class StockManager {
         return instance;
     }
 
-    // Charger les produits (même liste que dans ProduitController)
-    private void chargerProduits() {
+    private void chargerDepuisBaseDeDonnees() {
+        // Si la base de données est vide, charger les données par défaut
+        if (produitDAO.estVide()) {
+            System.out.println("⚠️ Base de données vide, chargement des données par défaut...");
+            chargerDonneesParDefaut();
+            produitDAO.sauvegarderTous(produits);
+        } else {
+            // Charger depuis la base de données
+            System.out.println("📥 Chargement des produits depuis PostgreSQL...");
+            List<Produit> produitsDB = produitDAO.findAll();
+            produits.clear();
+            produits.addAll(produitsDB);
+
+            System.out.println("📥 Chargement des mouvements depuis PostgreSQL...");
+            List<Mouvement> mouvementsDB = mouvementDAO.findAll();
+            mouvements.clear();
+            mouvements.addAll(mouvementsDB);
+        }
+    }
+
+    private void chargerDonneesParDefaut() {
         produits.clear();
 
         // BEVERAGES
@@ -121,23 +160,49 @@ public class StockManager {
         produits.add(new Produit("OTHER ITEMS", "BLACK CLOTH", null));
     }
 
-    // Ajouter une entrée en stock
+    // ✅ AJOUTER UNE ENTRÉE
     public void ajouterEntree(Produit produit, Double quantite, String motif) {
         if (produit != null && quantite != null && quantite > 0) {
-            // Mettre à jour la quantité
+            // Mettre à jour la quantité en mémoire
             Double ancienneQte = produit.getQtyInStock();
             if (ancienneQte == null) ancienneQte = 0.0;
             produit.setQtyInStock(ancienneQte + quantite);
 
+            // ✅ Sauvegarder via DAO
+            produitDAO.mettreAJourQuantite(produit.getCategorie(), produit.getNom(), produit.getQtyInStock());
+
             // Enregistrer le mouvement
             Mouvement mouvement = new Mouvement("ENTRÉE", produit.getNom(), quantite, motif);
-            mouvements.add(0, mouvement); // Ajouter au début de la liste
+            mouvements.add(0, mouvement);
+
+            // ✅ Sauvegarder via DAO
+            mouvementDAO.sauvegarder(mouvement);
 
             System.out.println("✅ Entrée ajoutée : " + produit.getNom() + " +" + quantite);
         }
     }
 
-    // Getters
+    // ✅ AJOUTER UNE SORTIE
+    public void ajouterSortie(Produit produit, Double quantite, String motif) {
+        if (produit != null && quantite != null && quantite > 0) {
+            Double ancienneQte = produit.getQtyInStock();
+            if (ancienneQte == null) ancienneQte = 0.0;
+            produit.setQtyInStock(ancienneQte - quantite);
+
+            // Sauvegarder via DAO
+            produitDAO.mettreAJourQuantite(produit.getCategorie(), produit.getNom(), produit.getQtyInStock());
+
+            // Enregistrer le mouvement
+            Mouvement mouvement = new Mouvement("SORTIE", produit.getNom(), quantite, motif);
+            mouvements.add(0, mouvement);
+
+            // Sauvegarder via DAO
+            mouvementDAO.sauvegarder(mouvement);
+
+            System.out.println("✅ Sortie ajoutée : " + produit.getNom() + " -" + quantite);
+        }
+    }
+
     public ObservableList<Produit> getProduits() {
         return produits;
     }
@@ -146,11 +211,10 @@ public class StockManager {
         return mouvements;
     }
 
-    // Récupérer uniquement les produits (pas les titres de catégories)
     public ObservableList<Produit> getProduitsUniquement() {
         ObservableList<Produit> liste = FXCollections.observableArrayList();
         for (Produit p : produits) {
-            if (p.getNom() != null) {  // Exclure les titres de catégories
+            if (p.getNom() != null) {
                 liste.add(p);
             }
         }
