@@ -1,14 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="pkg.gestion_stock.controllers.InventaireController"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pkg.gestion_stock.controllers.InventaireController"
+      spacing="0" style="-fx-background-color: #f4f6f9;">
 
-</AnchorPane>
+    <!-- ===== HEADER ===== -->
+    <VBox style="-fx-background-color: #1a252f; -fx-padding: 25 30 25 30;">
+        <Label text="📦  INVENTAIRE DU STOCK"
+               style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
+
+    </VBox>
+
+    <ScrollPane fitToWidth="true"
+                style="-fx-background-color: transparent; -fx-border-color: transparent;"
+                VBox.vgrow="ALWAYS">
+        <VBox spacing="20" style="-fx-padding: 25 30 30 30;">
+
+            <!-- ===== CARDS STATISTIQUES ===== -->
+            <HBox spacing="15">
+
+                <!-- Total produits -->
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 18 10;
+                             -fx-background-radius: 10;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                    <Label text="📦" style="-fx-font-size: 26;"/>
+                    <Label fx:id="lblTotalProduits" text="0"
+                           style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    <Label text="Total produits"
+                           style="-fx-font-size: 11; -fx-text-fill: #888;"/>
+                </VBox>
+
+                <!-- Produits OK -->
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 18 10;
+                             -fx-background-radius: 10;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                    <Label text="✅" style="-fx-font-size: 26;"/>
+                    <Label fx:id="lblProduitsOK" text="0"
+                           style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                    <Label text="Stock OK"
+                           style="-fx-font-size: 11; -fx-text-fill: #888;"/>
+                </VBox>
+
+                <!-- Produits bas -->
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 18 10;
+                             -fx-background-radius: 10;
+                             -fx-effect: dropshadow(gaussian, rgb(255,0,0), 8, 0, 0, 2);">
+                    <Label text="⚠️" style="-fx-font-size: 26;"/>
+                    <Label fx:id="lblProduitsAlerte" text="0"
+                           style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #e67e22;"/>
+                    <Label text="Stock bas"
+                           style="-fx-font-size: 11; -fx-text-fill: #888;"/>
+                </VBox>
+
+                <!-- Ruptures -->
+                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 18 10;
+                             -fx-background-radius: 10;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                    <Label text="🔴" style="-fx-font-size: 26;"/>
+                    <Label fx:id="lblProduitsRupture" text="0"
+                           style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
+                    <Label text="Rupture de stock"
+                           style="-fx-font-size: 11; -fx-text-fill: #888;"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- ===== SEUIL MINIMAL ===== -->
+            <HBox spacing="12" alignment="CENTER_LEFT"
+                  style="-fx-background-color: white; -fx-padding: 14 20;
+                         -fx-background-radius: 10;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+                <Label text=" Seuil minimal d'alerte :"
+                       style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                <TextField fx:id="txtSeuil" prefWidth="80"
+                           style="-fx-font-size: 13; -fx-padding: 6 10;
+                                  -fx-background-radius: 6; -fx-border-radius: 6;
+                                  -fx-border-color: #ddd; -fx-border-width: 1;"/>
+                <Button text="Appliquer" onAction="#appliquerSeuil"
+                        style="-fx-background-color: #2980b9; -fx-text-fill: white;
+                               -fx-font-size: 12; -fx-padding: 7 16;
+                               -fx-background-radius: 6; -fx-cursor: hand;"/>
+                <Label fx:id="lblSeuilActuel" text="Seuil actuel : 10"
+                       style="-fx-font-size: 12; -fx-text-fill: #888; -fx-font-style: italic;"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 Rafraîchir" onAction="#rafraichir"
+                        style="-fx-background-color: #ecf0f1; -fx-text-fill: #555;
+                               -fx-font-size: 12; -fx-padding: 7 16;
+                               -fx-background-radius: 6; -fx-cursor: hand;"/>
+            </HBox>
+
+            <!-- ===== ALERTES CARD ===== -->
+            <VBox spacing="0" style="-fx-background-color: white;
+                                     -fx-background-radius: 12;
+                                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);">
+
+                <HBox style="-fx-background-color: #fadbd8; -fx-padding: 14 20;
+                             -fx-background-radius: 12 12 0 0;" alignment="CENTER_LEFT">
+                    <Label text="🚨  Produits en alerte (stock bas ou rupture)"
+                           style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #922b21;"/>
+                </HBox>
+
+                <TableView fx:id="tableAlertes" prefHeight="200"
+                           style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                    <columns>
+                        <TableColumn fx:id="colAlertCategorie" text="Catégorie"  prefWidth="180"/>
+                        <TableColumn fx:id="colAlertProduit"   text="Produit"    prefWidth="220"/>
+                        <TableColumn fx:id="colAlertStock"     text="Stock actuel" prefWidth="130"/>
+                        <TableColumn fx:id="colAlertStatut"    text="Statut"     prefWidth="130"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="✅ Aucun produit en alerte !"
+                               style="-fx-text-fill: #27ae60; -fx-font-size: 14; -fx-font-weight: bold;"/>
+                    </placeholder>
+                </TableView>
+
+            </VBox>
+
+            <!-- ===== TABLEAU GLOBAL ===== -->
+            <VBox spacing="0" style="-fx-background-color: white;
+                                     -fx-background-radius: 12;
+                                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);">
+
+                <!-- Titre + filtre catégorie -->
+                <HBox style="-fx-background-color: #f2f3f4; -fx-padding: 14 20;
+                             -fx-background-radius: 12 12 0 0;"
+                      alignment="CENTER_LEFT" spacing="15">
+                    <Label text="📋  Tableau global des produits"
+                           style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Label text="Filtrer par catégorie :"
+                           style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                    <ComboBox fx:id="comboFiltreCategorie"
+                              onAction="#filtrerParCategorie"
+                              prefWidth="180"
+                              style="-fx-font-size: 12;"/>
+                </HBox>
+
+                <TableView fx:id="tableInventaire" VBox.vgrow="ALWAYS" prefHeight="420"
+                           style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                    <columns>
+                        <TableColumn fx:id="colCategorie"    text="📁 Catégorie"      prefWidth="160"/>
+                        <TableColumn fx:id="colProduit"      text="📦 Produit"         prefWidth="200"/>
+                        <TableColumn fx:id="colStockActuel"  text="📊 Stock actuel"    prefWidth="120"/>
+                        <TableColumn fx:id="colTotalEntrees" text="⬇️ Total entrées"   prefWidth="130"/>
+                        <TableColumn fx:id="colTotalSorties" text="⬆️ Total sorties"   prefWidth="130"/>
+                        <TableColumn fx:id="colStatut"       text="🔖 Statut"          prefWidth="110"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Aucun produit trouvé"
+                               style="-fx-text-fill: #aaa; -fx-font-size: 14;"/>
+                    </placeholder>
+                </TableView>
+
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>
