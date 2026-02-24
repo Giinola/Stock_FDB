@@ -23,14 +23,12 @@ public class SortieStockController {
     @FXML private Label lblNouveauStock;
 
     // ===== FILTRES =====
-    @FXML private ComboBox<String> comboFiltreType;
     @FXML private DatePicker datePickerFiltre;
     @FXML private TextField txtFiltreRecherche;
 
     // ===== TABLEAU =====
     @FXML private TableView<Mouvement> tableMouvements;
     @FXML private TableColumn<Mouvement, String> colDate;
-    @FXML private TableColumn<Mouvement, String> colType;
     @FXML private TableColumn<Mouvement, String> colProduit;
     @FXML private TableColumn<Mouvement, Double> colQuantite;
     @FXML private TableColumn<Mouvement, String> colMotif;
@@ -91,15 +89,15 @@ public class SortieStockController {
             if (produitsFiltre.size() == 1) comboProduits.setValue(produitsFiltre.get(0));
         });
 
-        // ===== COMBO FILTRE TYPE =====
-        comboFiltreType.setItems(FXCollections.observableArrayList("Tous", "ENTRÉE", "SORTIE"));
-        comboFiltreType.setValue("Tous");
-
-        // ===== FILTERED LIST MOUVEMENTS =====
-        mouvementsFiltre = new FilteredList<>(stockManager.getMouvements(), m -> true);
+        // ===== FILTERED LIST — UNIQUEMENT LES SORTIES =====
+        // La liste de base filtre déjà sur SORTIE uniquement
+        // Les filtres date/produit s'appliquent par-dessus
+        mouvementsFiltre = new FilteredList<>(
+                stockManager.getMouvements(),
+                m -> "SORTIE".equals(m.getType())
+        );
 
         // Listeners filtres
-        comboFiltreType.valueProperty().addListener((obs, o, n) -> appliquerFiltres());
         datePickerFiltre.valueProperty().addListener((obs, o, n) -> appliquerFiltres());
         txtFiltreRecherche.textProperty().addListener((obs, o, n) -> appliquerFiltres());
 
@@ -109,36 +107,29 @@ public class SortieStockController {
         colQuantite.setCellValueFactory(new PropertyValueFactory<>("quantite"));
         colMotif.setCellValueFactory(new PropertyValueFactory<>("motif"));
 
-        // Colonne TYPE avec couleur
-        colType.setCellValueFactory(new PropertyValueFactory<>("type"));
-        colType.setCellFactory(col -> new TableCell<Mouvement, String>() {
-            @Override
-            protected void updateItem(String type, boolean empty) {
-                super.updateItem(type, empty);
-                if (empty || type == null) {
-                    setText(null);
-                    setStyle("");
-                } else if (type.equals("ENTRÉE")) {
-                    setText("⬇️ ENTRÉE");
-                    setStyle("-fx-text-fill: #1a7a4a; -fx-font-weight: bold; -fx-background-color: #d5f5e3;");
-                } else {
-                    setText("⬆️ SORTIE");
-                    setStyle("-fx-text-fill: #922b21; -fx-font-weight: bold; -fx-background-color: #fadbd8;");
-                }
-            }
-        });
-
-        // Lignes colorées selon le type
+        // Toutes les lignes en rouge clair puisque c'est uniquement des sorties
         tableMouvements.setRowFactory(tv -> new TableRow<Mouvement>() {
             @Override
             protected void updateItem(Mouvement mouvement, boolean empty) {
                 super.updateItem(mouvement, empty);
                 if (empty || mouvement == null) {
                     setStyle("");
-                } else if ("ENTRÉE".equals(mouvement.getType())) {
-                    setStyle("-fx-background-color: #f9fffe;");
                 } else {
                     setStyle("-fx-background-color: #fff9f9;");
+                }
+            }
+        });
+
+        // Colonne quantité en rouge
+        colQuantite.setCellFactory(col -> new TableCell<Mouvement, Double>() {
+            @Override
+            protected void updateItem(Double qte, boolean empty) {
+                super.updateItem(qte, empty);
+                if (empty || qte == null) {
+                    setText(null); setStyle("");
+                } else {
+                    setText(String.format("- %.1f", qte));
+                    setStyle("-fx-text-fill: #c0392b; -fx-font-weight: bold;");
                 }
             }
         });
@@ -167,7 +158,6 @@ public class SortieStockController {
             if (nouveauStock < 0) {
                 lblNouveauStock.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
             } else if (nouveauStock <= stockActuel * 0.2) {
-                // ⚠️ Moins de 20% du stock restant → orange
                 lblNouveauStock.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #e67e22;");
             } else {
                 lblNouveauStock.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #27ae60;");
@@ -178,27 +168,23 @@ public class SortieStockController {
         }
     }
 
-    // ===== FILTRES HISTORIQUE =====
+    // ===== FILTRES HISTORIQUE (date + produit seulement) =====
     private void appliquerFiltres() {
-        String typeFiltre = comboFiltreType.getValue();
         LocalDate dateFiltre = datePickerFiltre.getValue();
         String rechercheFiltre = txtFiltreRecherche.getText().trim().toLowerCase();
 
         mouvementsFiltre.setPredicate(mouvement -> {
 
-            // Filtre type
-            if (typeFiltre != null && !typeFiltre.equals("Tous")) {
-                if (!typeFiltre.equals(mouvement.getType())) return false;
-            }
+            // Toujours garder uniquement les SORTIES
+            if (!"SORTIE".equals(mouvement.getType())) return false;
 
             // Filtre date
             if (dateFiltre != null) {
                 if (mouvement.getDate() == null) return false;
-                LocalDate dateMouvement = mouvement.getDate().toLocalDate();
-                if (!dateMouvement.equals(dateFiltre)) return false;
+                if (!mouvement.getDate().toLocalDate().equals(dateFiltre)) return false;
             }
 
-            // Filtre produit / catégorie
+            // Filtre produit
             if (!rechercheFiltre.isEmpty()) {
                 String nom = mouvement.getProduitNom() == null ? "" : mouvement.getProduitNom().toLowerCase();
                 if (!nom.contains(rechercheFiltre)) return false;
@@ -211,7 +197,6 @@ public class SortieStockController {
     // ===== RÉINITIALISER FILTRES =====
     @FXML
     private void reinitialiserFiltres() {
-        comboFiltreType.setValue("Tous");
         datePickerFiltre.setValue(null);
         txtFiltreRecherche.clear();
     }
@@ -242,7 +227,6 @@ public class SortieStockController {
 
             double ancienStock = produitSelectionne.getQtyInStock() == null ? 0.0 : produitSelectionne.getQtyInStock();
 
-            // ✅ Vérification stock suffisant
             if (quantite > ancienStock) {
                 showAlert("Erreur", String.format(
                         "⚠️ Stock insuffisant !\n\nStock actuel : %.1f\nQuantité demandée : %.1f",
@@ -252,7 +236,6 @@ public class SortieStockController {
             }
 
             stockManager.ajouterSortie(produitSelectionne, quantite, motif);
-
             double nouveauStock = produitSelectionne.getQtyInStock();
 
             // Reset formulaire
@@ -266,10 +249,10 @@ public class SortieStockController {
 
             showAlert("Succès", String.format(
                     "✅ Sortie enregistrée !\n\n" +
-                            "Produit        : %s\n" +
-                            "Ancien stock   : %.1f\n" +
+                            "Produit         : %s\n" +
+                            "Ancien stock    : %.1f\n" +
                             "Quantité sortie : -%.1f\n" +
-                            "Nouveau stock  : %.1f",
+                            "Nouveau stock   : %.1f",
                     produitSelectionne.getNom(), ancienStock, quantite, nouveauStock
             ));
 
