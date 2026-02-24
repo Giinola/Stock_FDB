@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pkg.gestion_stock.controllers.HistoriqueController"
+      spacing="0" style="-fx-background-color: #f4f6f9;">
+
+    <!-- ===== HEADER ===== -->
+    <VBox style="-fx-background-color: #8e44ad; -fx-padding: 25 30 25 30;">
+        <Label text="📊  HISTORIQUE COMPLET DES MOUVEMENTS"
+               style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <Label text="Consultez tous les mouvements de stock (entrées et sorties)"
+               style="-fx-font-size: 13; -fx-text-fill: #d7bde2;"/>
+    </VBox>
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-border-color: transparent;"
+                VBox.vgrow="ALWAYS">
+        <VBox spacing="20" style="-fx-padding: 25 30 30 30;">
+
+            <!-- ===== STATISTIQUES ===== -->
+            <HBox spacing="15">
+                <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);">
+                    <Label text="⬇️" style="-fx-font-size: 32;"/>
+                    <Label text="Total Entrées" style="-fx-font-size: 12; -fx-text-fill: #777;"/>
+                    <Label fx:id="lblTotalEntrees" text="0"
+                           style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                </VBox>
+                <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);">
+                    <Label text="⬆️" style="-fx-font-size: 32;"/>
+                    <Label text="Total Sorties" style="-fx-font-size: 12; -fx-text-fill: #777;"/>
+                    <Label fx:id="lblTotalSorties" text="0"
+                           style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #c0392b;"/>
+                </VBox>
+                <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);">
+                    <Label text="📊" style="-fx-font-size: 32;"/>
+                    <Label text="Total Mouvements" style="-fx-font-size: 12; -fx-text-fill: #777;"/>
+                    <Label fx:id="lblTotalMouvements" text="0"
+                           style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #8e44ad;"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- ===== TABLEAU CARD ===== -->
+            <VBox spacing="0" style="-fx-background-color: white; -fx-background-radius: 12;
+                                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);">
+
+                <!-- Titre -->
+                <HBox style="-fx-background-color: #f2f3f4; -fx-padding: 14 20;
+                             -fx-background-radius: 12 12 0 0;"
+                      alignment="CENTER_LEFT" spacing="15">
+                    <Label text="📋  Tous les mouvements"
+                           style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <!-- Tout sélectionner -->
+                    <CheckBox fx:id="chkToutSelectionner" text="Tout sélectionner"
+                              onAction="#toutSelectionner"
+                              style="-fx-font-size: 12; -fx-text-fill: #555;"/>
+                </HBox>
+
+                <!-- Filtres + boutons export -->
+                <HBox spacing="10" style="-fx-padding: 15 20; -fx-background-color: #fafafa;
+                                          -fx-border-color: #eee; -fx-border-width: 0 0 1 0;"
+                      alignment="CENTER_LEFT">
+
+                    <Label text="Filtrer :"
+                           style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+
+                    <ComboBox fx:id="comboFiltreType" promptText="🔄 Type"
+                              prefWidth="120" style="-fx-font-size: 12;"/>
+
+                    <DatePicker fx:id="datePickerFiltre" promptText="📅 Date..."
+                                prefWidth="155" style="-fx-font-size: 12;"/>
+
+                    <TextField fx:id="txtFiltreRecherche" promptText="🔍 Produit..."
+                               prefWidth="170"
+                               style="-fx-font-size: 12; -fx-padding: 6 10;
+                                      -fx-background-radius: 5; -fx-border-radius: 5;
+                                      -fx-border-color: #ddd; -fx-border-width: 1;"/>
+
+                    <Button text="✖ Réinitialiser" onAction="#reinitialiserFiltres"
+                            style="-fx-background-color: #ecf0f1; -fx-text-fill: #555;
+                                   -fx-font-size: 12; -fx-padding: 6 12;
+                                   -fx-background-radius: 5; -fx-cursor: hand;"/>
+
+                    <Separator orientation="VERTICAL"/>
+
+                    <!-- Export Excel -->
+                    <Button text="Télécharger en Excel" onAction="#exporterExcel"
+                            style="-fx-background-color: #1d6f42; -fx-text-fill: white;
+                                   -fx-font-size: 12; -fx-font-weight: bold;
+                                   -fx-padding: 6 14; -fx-background-radius: 5;
+                                   -fx-cursor: hand;"/>
+
+                    <!-- Export PDF -->
+                    <Button text="Télécharger en PDF" onAction="#exporterPDF"
+                            style="-fx-background-color: #c0392b; -fx-text-fill: white;
+                                   -fx-font-size: 12; -fx-font-weight: bold;
+                                   -fx-padding: 6 14; -fx-background-radius: 5;
+                                   -fx-cursor: hand;"/>
+
+                </HBox>
+
+                <!-- Info sélection -->
+                <HBox fx:id="bandeauSelection" spacing="10" alignment="CENTER_LEFT"
+                      style="-fx-padding: 8 20; -fx-background-color: #eaf4fb;
+                             -fx-border-color: #aed6f1; -fx-border-width: 0 0 1 0;"
+                      visible="false" managed="false">
+                    <Label fx:id="lblInfoSelection" text="0 ligne(s) sélectionnée(s) — export sur la sélection"
+                           style="-fx-font-size: 12; -fx-text-fill: #2980b9; -fx-font-style: italic;"/>
+                    <Button text="✖ Désélectionner tout" onAction="#deselectionnerTout"
+                            style="-fx-background-color: transparent; -fx-text-fill: #2980b9;
+                                   -fx-font-size: 11; -fx-cursor: hand; -fx-underline: true;"/>
+                </HBox>
+
+                <!-- Tableau -->
+                <TableView fx:id="tableMouvements" VBox.vgrow="ALWAYS" prefHeight="450"
+                           style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                    <columns>
+                        <TableColumn fx:id="colCheck"    text=""           prefWidth="40"/>
+                        <TableColumn fx:id="colDate"     text="📅 Date"    prefWidth="155"/>
+                        <TableColumn fx:id="colType"     text="🔄 Type"    prefWidth="115"/>
+                        <TableColumn fx:id="colProduit"  text="📦 Produit" prefWidth="210"/>
+                        <TableColumn fx:id="colQuantite" text="🔢 Qté"     prefWidth="90"/>
+                        <TableColumn fx:id="colMotif"    text="📝 Motif"   prefWidth="230"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Aucun mouvement trouvé"
+                               style="-fx-text-fill: #aaa; -fx-font-size: 14;"/>
+                    </placeholder>
+                </TableView>
+
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</VBox>

@@ -17,6 +17,7 @@ public class MenuController {
     @FXML private Button btnEntree;
     @FXML private Button btnSortie;
     @FXML private Button btnInventaire;
+    @FXML private Button btnHistorique;
 
     @FXML
     public void initialize() {
@@ -54,6 +55,12 @@ public class MenuController {
         setActiveButton(btnInventaire);
     }
 
+    @FXML
+    private void showHistorique() {
+        loadView("/pkg/gestion_stock/fxml/historique.fxml");
+        setActiveButton(btnHistorique);
+    }
+
     private void loadView(String fxmlPath) {
         try {
             System.out.println("🔄 Chargement de : " + fxmlPath);
@@ -77,6 +84,7 @@ public class MenuController {
         btnEntree.setStyle(defaultStyle);
         btnSortie.setStyle(defaultStyle);
         btnInventaire.setStyle(defaultStyle);
+        btnHistorique.setStyle(defaultStyle);
 
         activeBtn.setStyle(activeStyle);
     }
