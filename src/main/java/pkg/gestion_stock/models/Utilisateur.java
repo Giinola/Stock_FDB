@@ -1,8 +1,6 @@
 package pkg.gestion_stock.models;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Utilisateur {
     private Long id;
@@ -17,9 +15,9 @@ public class Utilisateur {
     private LocalDateTime dernierLogin;
     private int tentativesEchec;
     private boolean compteVerrouille;
+    private String role; // OWNER, MANAGER, EMPLOYE
 
-    public Utilisateur() {
-    }
+    public Utilisateur() {}
 
     public Utilisateur(String username, String password) {
         this.username = username;
@@ -30,99 +28,51 @@ public class Utilisateur {
         this.compteVerrouille = false;
     }
 
-    public Long getId() {
-        return id;
-    }
+    // ===== GETTERS / SETTERS =====
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getPrenom() { return prenom; }
+    public void setPrenom(String prenom) { this.prenom = prenom; }
 
-    public String getNom() {
-        return nom;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+    public String getTelephone() { return telephone; }
+    public void setTelephone(String telephone) { this.telephone = telephone; }
 
-    public String getPrenom() {
-        return prenom;
-    }
+    public boolean isActif() { return actif; }
+    public void setActif(boolean actif) { this.actif = actif; }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
+    public LocalDateTime getDateCreation() { return dateCreation; }
+    public void setDateCreation(LocalDateTime dateCreation) { this.dateCreation = dateCreation; }
 
-    public String getEmail() {
-        return email;
-    }
+    public LocalDateTime getDernierLogin() { return dernierLogin; }
+    public void setDernierLogin(LocalDateTime dernierLogin) { this.dernierLogin = dernierLogin; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public int getTentativesEchec() { return tentativesEchec; }
+    public void setTentativesEchec(int tentativesEchec) { this.tentativesEchec = tentativesEchec; }
 
-    public String getTelephone() {
-        return telephone;
-    }
+    public boolean isCompteVerrouille() { return compteVerrouille; }
+    public void setCompteVerrouille(boolean compteVerrouille) { this.compteVerrouille = compteVerrouille; }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public boolean isActif() {
-        return actif;
-    }
-
-    public void setActif(boolean actif) {
-        this.actif = actif;
-    }
-
-    public LocalDateTime getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(LocalDateTime dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public LocalDateTime getDernierLogin() {
-        return dernierLogin;
-    }
-
-    public void setDernierLogin(LocalDateTime dernierLogin) {
-        this.dernierLogin = dernierLogin;
-    }
-
-    public int getTentativesEchec() {
-        return tentativesEchec;
-    }
-
-    public void setTentativesEchec(int tentativesEchec) {
-        this.tentativesEchec = tentativesEchec;
-    }
-
-    public boolean isCompteVerrouille() {
-        return compteVerrouille;
-    }
-
-    public void setCompteVerrouille(boolean compteVerrouille) {
-        this.compteVerrouille = compteVerrouille;
+    @Override
+    public String toString() {
+        return username + (role != null ? " [" + role + "]" : "");
     }
 }
+
+

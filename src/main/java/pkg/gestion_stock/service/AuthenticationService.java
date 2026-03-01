@@ -2,12 +2,10 @@ package pkg.gestion_stock.service;
 
 import pkg.gestion_stock.Database.DatabaseConnection;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 
 public class AuthenticationService {
     private Connection connection;
@@ -37,33 +35,42 @@ public class AuthenticationService {
 
                 if (!actif) {
                     System.out.println("Compte desactive : " + username);
-                    rs.close();
-                    stmt.close();
+                    rs.close(); stmt.close();
                     return false;
                 }
 
                 if (verrouille) {
                     System.out.println("Compte verrouille : " + username);
-                    rs.close();
-                    stmt.close();
+                    rs.close(); stmt.close();
                     return false;
                 }
 
-                // Comparaison directe sans hash
                 if (storedPassword.equals(password)) {
                     System.out.println("Authentification reussie pour : " + username);
 
+                    // Mise à jour dernier login
                     String updateQuery = "UPDATE utilisateur SET dernier_login = CURRENT_TIMESTAMP, tentatives_echec = 0 WHERE username = ?";
                     PreparedStatement updateStmt = connection.prepareStatement(updateQuery);
                     updateStmt.setString(1, username);
                     updateStmt.executeUpdate();
                     updateStmt.close();
 
-                    SessionManager.getInstance().login(username);
+                    // ===== CHARGER LE ROLE =====
+                    String roleQuery = "SELECT r.nom FROM role r " +
+                            "JOIN utilisateur_role ur ON r.id = ur.role_id " +
+                            "JOIN utilisateur u ON ur.utilisateur_id = u.id " +
+                            "WHERE u.username = ?";
+                    PreparedStatement roleStmt = connection.prepareStatement(roleQuery);
+                    roleStmt.setString(1, username);
+                    ResultSet roleRs = roleStmt.executeQuery();
+                    String role = roleRs.next() ? roleRs.getString("nom") : "EMPLOYE";
+                    roleStmt.close();
 
-                    rs.close();
-                    stmt.close();
+                    SessionManager.getInstance().login(username, role);
+
+                    rs.close(); stmt.close();
                     return true;
+
                 } else {
                     System.out.println("Mot de passe incorrect");
 
@@ -73,19 +80,17 @@ public class AuthenticationService {
                     updateStmt.executeUpdate();
                     updateStmt.close();
 
-                    rs.close();
-                    stmt.close();
+                    rs.close(); stmt.close();
                     return false;
                 }
             } else {
                 System.out.println("Utilisateur inexistant : " + username);
-                rs.close();
-                stmt.close();
+                rs.close(); stmt.close();
                 return false;
             }
 
         } catch (SQLException e) {
-            System.err.println("Erreur SQL lors de l'authentification : " + e.getMessage());
+            System.err.println("Erreur SQL : " + e.getMessage());
             e.printStackTrace();
             return false;
         }
