@@ -6,7 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="pkg.gestion_stock.controllers.ProduitController"
+            fx:controller="pkg.gestion_stock.controllers.UtilisateurController"
             style="-fx-background-color: #f0f2f5;">
 
     <!-- ===== HEADER ===== -->
@@ -14,24 +14,36 @@
         <HBox alignment="CENTER_LEFT" spacing="15"
               style="-fx-background-color: white; -fx-padding: 18 25;
                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
-            <Label text="📋" style="-fx-font-size: 26;"/>
-            <Label text="LISTE DES PRODUITS"
+            <Label text="👥" style="-fx-font-size: 26;"/>
+            <Label text="GESTION DES UTILISATEURS"
                    style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
 
             <Pane HBox.hgrow="ALWAYS"/>
 
-            <!-- STATS COMPACTES -->
+            <!-- STATS COMPACTES DANS LE HEADER -->
             <HBox spacing="20" alignment="CENTER">
                 <VBox alignment="CENTER" spacing="2">
-                    <Label fx:id="lblTotalProduits" text="0"
+                    <Label fx:id="lblTotalUsers" text="0"
                            style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
-                    <Label text="Produits" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                    <Label text="Total" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
                 </VBox>
                 <Separator orientation="VERTICAL"/>
                 <VBox alignment="CENTER" spacing="2">
-                    <Label fx:id="lblTotalCategories" text="0"
+                    <Label fx:id="lblUsersActifs" text="0"
                            style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
-                    <Label text="Catégories" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                    <Label text="Actifs" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox alignment="CENTER" spacing="2">
+                    <Label fx:id="lblUsersVerrouilles" text="0"
+                           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
+                    <Label text="Verrouillés" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox alignment="CENTER" spacing="2">
+                    <Label fx:id="lblUsersAdmin" text="0"
+                           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #8e44ad;"/>
+                    <Label text="Admins" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
                 </VBox>
             </HBox>
         </HBox>
@@ -42,60 +54,85 @@
                     style="-fx-background-color: #f0f2f5; -fx-background: #f0f2f5;">
             <VBox spacing="20" style="-fx-padding: 25;">
 
-                <!-- ===== TABLEAU ===== -->
+                <!-- ===== TABLEAU PRINCIPAL ===== -->
                 <VBox spacing="12"
                       style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12;
                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
 
+                    <!-- Titre + Recherche -->
                     <HBox alignment="CENTER_LEFT" spacing="15">
-                        <Label text="📦  Produits en stock"
+                        <Label text="📋  Liste des utilisateurs"
                                style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
                         <Pane HBox.hgrow="ALWAYS"/>
-                        <Button text="🔄  Actualiser" onAction="#actualiser"
-                                style="-fx-background-color: #ecf0f1; -fx-text-fill: #2c3e50;
-                                       -fx-font-size: 12; -fx-background-radius: 7; -fx-padding: 8 15;"/>
+                        <TextField fx:id="txtRecherche" promptText="🔍  Rechercher..."
+                                   prefWidth="220"
+                                   style="-fx-font-size: 13; -fx-padding: 8; -fx-background-radius: 7;
+                                          -fx-border-color: #dde; -fx-border-radius: 7;"/>
                     </HBox>
 
                     <Separator/>
 
-                    <TableView fx:id="tableProduits" prefHeight="380">
+                    <TableView fx:id="tableUtilisateurs" prefHeight="350">
                         <columns>
-                            <TableColumn fx:id="colCategorie" text="Catégorie" prefWidth="200"/>
-                            <TableColumn fx:id="colNom"       text="Produit"   prefWidth="300"/>
-                            <TableColumn fx:id="colQuantite"  text="Quantité"  prefWidth="150"
-                                         style="-fx-alignment: CENTER;"/>
+                            <TableColumn fx:id="colUsername"  text="Username"  prefWidth="120"/>
+                            <TableColumn fx:id="colNom"       text="Nom"       prefWidth="110"/>
+                            <TableColumn fx:id="colPrenom"    text="Prénom"    prefWidth="110"/>
+                            <TableColumn fx:id="colEmail"     text="Email"     prefWidth="180"/>
+                            <TableColumn fx:id="colTelephone" text="Téléphone" prefWidth="110"/>
+                            <TableColumn fx:id="colRole"      text="Rôle"      prefWidth="100"/>
+                            <TableColumn fx:id="colActif"     text="Statut"    prefWidth="80"/>
                         </columns>
                         <placeholder>
-                            <Label text="Aucun produit trouvé."
+                            <Label text="Aucun utilisateur trouvé."
                                    style="-fx-text-fill: #aaa; -fx-font-size: 13;"/>
                         </placeholder>
                     </TableView>
 
                 </VBox>
 
-                <!-- ===== FORMULAIRE CRUD EN LIGNE ===== -->
+                <!-- ===== FORMULAIRE EN LIGNE ===== -->
                 <VBox spacing="12"
                       style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12;
                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
 
-                    <Label text="✏️  Ajouter / Modifier un produit"
+                    <Label text="✏️  Ajouter / Modifier un utilisateur"
                            style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
                     <Separator/>
 
-                    <!-- CHAMPS EN LIGNE -->
+                    <!-- LIGNE 1 : Username, Password, Nom, Prénom -->
+                    <HBox spacing="12">
+                        <TextField fx:id="txtUsername" promptText="Username *"
+                                   HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                   style="-fx-font-size: 13; -fx-padding: 9; -fx-background-radius: 7;
+                                          -fx-border-color: #dde; -fx-border-radius: 7;"/>
+                        <PasswordField fx:id="txtPassword" promptText="Mot de passe *"
+                                       HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                       style="-fx-font-size: 13; -fx-padding: 9; -fx-background-radius: 7;
+                                          -fx-border-color: #dde; -fx-border-radius: 7;"/>
+                        <TextField fx:id="txtNom" promptText="Nom"
+                                   HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                   style="-fx-font-size: 13; -fx-padding: 9; -fx-background-radius: 7;
+                                          -fx-border-color: #dde; -fx-border-radius: 7;"/>
+                        <TextField fx:id="txtPrenom" promptText="Prénom"
+                                   HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                   style="-fx-font-size: 13; -fx-padding: 9; -fx-background-radius: 7;
+                                          -fx-border-color: #dde; -fx-border-radius: 7;"/>
+                    </HBox>
+
+                    <!-- LIGNE 2 : Email, Téléphone, Rôle, Actif, Boutons -->
                     <HBox spacing="12" alignment="CENTER_LEFT">
-                        <TextField fx:id="txtCategorie" promptText="Catégorie *"
+                        <TextField fx:id="txtEmail" promptText="Email"
                                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
                                    style="-fx-font-size: 13; -fx-padding: 9; -fx-background-radius: 7;
                                           -fx-border-color: #dde; -fx-border-radius: 7;"/>
-                        <TextField fx:id="txtNom" promptText="Nom du produit *"
+                        <TextField fx:id="txtTelephone" promptText="Téléphone"
                                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
                                    style="-fx-font-size: 13; -fx-padding: 9; -fx-background-radius: 7;
                                           -fx-border-color: #dde; -fx-border-radius: 7;"/>
-                        <TextField fx:id="txtQuantite" promptText="Quantité"
-                                   prefWidth="150"
-                                   style="-fx-font-size: 13; -fx-padding: 9; -fx-background-radius: 7;
-                                          -fx-border-color: #dde; -fx-border-radius: 7;"/>
+                        <ComboBox fx:id="comboRole" prefWidth="130"
+                                  style="-fx-font-size: 13;"/>
+                        <CheckBox fx:id="chkActif" text="Actif" selected="true"
+                                  style="-fx-font-size: 13;"/>
                     </HBox>
 
                     <!-- BOUTONS CRUD EN LIGNE -->
@@ -105,7 +142,7 @@
                                 style="-fx-background-color: #27ae60; -fx-text-fill: white;
                                        -fx-font-size: 13; -fx-font-weight: bold;
                                        -fx-background-radius: 7; -fx-padding: 10 20;"/>
-                        <Button fx:id="btnModifier" text="✏️  Modifier quantité"
+                        <Button fx:id="btnModifier" text="✏️  Modifier"
                                 onAction="#modifier"
                                 style="-fx-background-color: #2980b9; -fx-text-fill: white;
                                        -fx-font-size: 13; -fx-font-weight: bold;

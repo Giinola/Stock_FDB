@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pkg.gestion_stock.controllers.LogsController"
+            style="-fx-background-color: #f0f2f5;">
+
+    <!-- HEADER -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15"
+              style="-fx-background-color: white; -fx-padding: 18 25;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+            <Label text="📋" style="-fx-font-size: 26;"/>
+            <Label text="JOURNAL DES ACTIVITÉS"
+                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblTotal" text="Total : 0 actions"
+                   style="-fx-font-size: 13; -fx-text-fill: #777;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" style="-fx-padding: 25;">
+
+            <!-- FILTRES -->
+            <HBox spacing="12" alignment="CENTER_LEFT"
+                  style="-fx-background-color: white; -fx-padding: 15 20; -fx-background-radius: 12;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+
+                <TextField fx:id="txtRecherche" promptText="🔍  Rechercher par user, detail..."
+                           prefWidth="300"
+                           style="-fx-font-size: 13; -fx-padding: 8; -fx-background-radius: 7;
+                                  -fx-border-color: #dde; -fx-border-radius: 7;"/>
+
+                <ComboBox fx:id="comboFiltreAction" prefWidth="160"
+                          style="-fx-font-size: 13;"/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <Button text="🔄  Actualiser" onAction="#actualiser"
+                        style="-fx-background-color: #3498db; -fx-text-fill: white;
+                               -fx-font-size: 13; -fx-font-weight: bold;
+                               -fx-background-radius: 7; -fx-padding: 9 18;"/>
+            </HBox>
+
+            <!-- TABLEAU -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 12;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+
+                <TableView fx:id="tableLogs" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colDate"     text="Date / Heure" prefWidth="160"/>
+                        <TableColumn fx:id="colUsername" text="Utilisateur"  prefWidth="120"/>
+                        <TableColumn fx:id="colAction"   text="Action"       prefWidth="110"/>
+                        <TableColumn fx:id="colTable"    text="Section"      prefWidth="120"/>
+                        <TableColumn fx:id="colDetail"   text="Détail"       prefWidth="400"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Aucune activité enregistrée."
+                               style="-fx-text-fill: #aaa; -fx-font-size: 13;"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

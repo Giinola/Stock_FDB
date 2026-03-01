@@ -220,4 +220,7 @@ public class StockManager {
         }
         return liste;
     }
+    public void recharger() {
+        chargerDepuisBaseDeDonnees();
+    }
 }
