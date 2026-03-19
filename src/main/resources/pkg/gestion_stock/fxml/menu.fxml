@@ -10,7 +10,7 @@
             prefWidth="1200" prefHeight="700">
 
     <left>
-        <VBox prefWidth="250" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+        <VBox prefWidth="250" style="-fx-background-color: #000000; -fx-padding: 20;">
 
             <VBox alignment="CENTER" spacing="5" style="-fx-padding: 0 0 30 0;">
                 <Text text="STOCK MANAGER"
@@ -35,13 +35,13 @@
                                -fx-font-size: 14; -fx-padding: 12; -fx-alignment: CENTER_LEFT;
                                -fx-background-radius: 5;"/>
 
-                <Button fx:id="btnEntree" text="⬇️  Entrée en Stock"
+                <Button fx:id="btnEntree" text="  Entrée en Stock"
                         onAction="#showEntreeStock" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1;
                                -fx-font-size: 14; -fx-padding: 12; -fx-alignment: CENTER_LEFT;
                                -fx-background-radius: 5;"/>
 
-                <Button fx:id="btnSortie" text="⬆  Sortie en Stock"
+                <Button fx:id="btnSortie" text=" Sortie en Stock"
                         onAction="#showSortieStock" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1;
                                -fx-font-size: 14; -fx-padding: 12; -fx-alignment: CENTER_LEFT;
@@ -49,6 +49,12 @@
 
                 <Button fx:id="btnInventaire" text=" Inventaire"
                         onAction="#showInventaire" maxWidth="Infinity"
+                        style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1;
+                               -fx-font-size: 14; -fx-padding: 12; -fx-alignment: CENTER_LEFT;
+                               -fx-background-radius: 5;"/>
+
+                <Button fx:id="btnResto" text=" Resto"
+                        onAction="#showResto" maxWidth="Infinity"
                         style="-fx-background-color: transparent; -fx-text-fill: #ecf0f1;
                                -fx-font-size: 14; -fx-padding: 12; -fx-alignment: CENTER_LEFT;
                                -fx-background-radius: 5;"/>

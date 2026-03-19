@@ -20,6 +20,7 @@ public class MenuController {
     @FXML private Button btnEntree;
     @FXML private Button btnSortie;
     @FXML private Button btnInventaire;
+    @FXML private Button btnResto;
     @FXML private Button btnHistorique;
     @FXML private Button btnUtilisateur;
     @FXML private Button btnLogs;
@@ -44,6 +45,7 @@ public class MenuController {
     @FXML private void showEntreeStock() { loadView("/pkg/gestion_stock/fxml/entree_stock.fxml"); setActiveButton(btnEntree); }
     @FXML private void showSortieStock() { loadView("/pkg/gestion_stock/fxml/sortie_stock.fxml"); setActiveButton(btnSortie); }
     @FXML private void showInventaire()  { loadView("/pkg/gestion_stock/fxml/inventaire.fxml");   setActiveButton(btnInventaire); }
+    @FXML private void showResto()       { loadView("/pkg/gestion_stock/fxml/resto.fxml") ;       setActiveButton(btnResto);}
     @FXML private void showHistorique()  { loadView("/pkg/gestion_stock/fxml/historique.fxml");   setActiveButton(btnHistorique); }
     @FXML private void showUtilisateur() { loadView("/pkg/gestion_stock/fxml/Utilisateur.fxml");  setActiveButton(btnUtilisateur); }
     @FXML private void showLogs()        { loadView("/pkg/gestion_stock/fxml/logs.fxml");          setActiveButton(btnLogs); }
@@ -71,6 +73,7 @@ public class MenuController {
         btnEntree.setStyle(defaultStyle);
         btnSortie.setStyle(defaultStyle);
         btnInventaire.setStyle(defaultStyle);
+        btnResto.setStyle(defaultStyle);
         btnHistorique.setStyle(defaultStyle);
         btnUtilisateur.setStyle(defaultStyle);
         btnLogs.setStyle(defaultStyle);
