@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pkg.gestion_stock.controllers.RestoController"
+      spacing="0" style="-fx-background-color: #f4f6f9;">
+
+    <!-- ===== HEADER ===== -->
+    <VBox style="-fx-background-color: #e67e22; -fx-padding: 25 30 25 30;">
+        <Label text="🍽️  RESTO "
+               style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        <Label text="Saisissez les quantités restantes dans le restaurant en fin de journée"
+               style="-fx-font-size: 13; -fx-text-fill: #f8c471;"/>
+    </VBox>
+
+    <ScrollPane fitToWidth="true"
+                style="-fx-background-color: transparent; -fx-border-color: transparent;"
+                VBox.vgrow="ALWAYS">
+        <VBox spacing="20" style="-fx-padding: 25 30 30 30;">
+
+            <!-- ===== BARRE ACTIONS ===== -->
+            <HBox spacing="12" alignment="CENTER_LEFT"
+                  style="-fx-background-color: white; -fx-padding: 14 20;
+                         -fx-background-radius: 10;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);">
+
+                <Button text="💾  Enregistrer" onAction="#enregistrer"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white;
+                               -fx-font-size: 13; -fx-font-weight: bold;
+                               -fx-padding: 10 24; -fx-background-radius: 8; -fx-cursor: hand;"/>
+
+                <Button text="🔄  Réinitialiser" onAction="#reinitialiser"
+                        style="-fx-background-color: #95a5a6; -fx-text-fill: white;
+                               -fx-font-size: 13; -fx-font-weight: bold;
+                               -fx-padding: 10 24; -fx-background-radius: 8; -fx-cursor: hand;"/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <Label text="📅" style="-fx-font-size: 16;"/>
+                <Label fx:id="lblDate" text="—"
+                       style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+            </HBox>
+
+            <!-- ===== TABLEAU SAISIE ===== -->
+            <VBox spacing="0" style="-fx-background-color: white;
+                                     -fx-background-radius: 12;
+                                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);">
+
+                <HBox style="-fx-background-color: #e67e22; -fx-padding: 14 20;
+                             -fx-background-radius: 12 12 0 0;" alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📝  Saisie du comptage"
+                           style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+                    <Label text="Double-cliquez sur la colonne TOTAL pour saisir"
+                           style="-fx-font-size: 11; -fx-text-fill: #f8c471; -fx-font-style: italic;"/>
+                </HBox>
+
+                <TableView fx:id="tableResto" VBox.vgrow="ALWAYS"
+                           prefHeight="500" editable="true"
+                           style="-fx-background-color: white; -fx-border-color: transparent;">
+                    <columns>
+                        <TableColumn fx:id="colCategorie" text="CATÉGORIE" prefWidth="220" editable="false"/>
+                        <TableColumn fx:id="colProduit"   text="PRODUIT"   prefWidth="360" editable="false"/>
+                        <TableColumn fx:id="colTotal"     text="TOTAL"     prefWidth="180"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Aucun produit" style="-fx-text-fill: #aaa; -fx-font-size: 13;"/>
+                    </placeholder>
+                </TableView>
+
+            </VBox>
+
+            <!-- ===== HISTORIQUE CARD ===== -->
+            <VBox spacing="0" style="-fx-background-color: white;
+                                     -fx-background-radius: 12;
+                                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 10, 0, 0, 3);">
+
+                <!-- Titre + contrôles -->
+                <HBox style="-fx-background-color: #f2f3f4; -fx-padding: 14 20;
+                             -fx-background-radius: 12 12 0 0;"
+                      alignment="CENTER_LEFT" spacing="12">
+                    <Label text="📋  Historique des comptages"
+                           style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                    <Pane HBox.hgrow="ALWAYS"/>
+
+                    <!-- Sélection date -->
+                    <Label text="Comptage du :"
+                           style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                    <ComboBox fx:id="comboHistorique"
+                              promptText="Choisir une date..."
+                              prefWidth="200"
+                              onAction="#chargerHistorique"
+                              style="-fx-font-size: 12;"/>
+
+                    <!-- Bouton supprimer -->
+                    <Button text="🗑 Supprimer" onAction="#supprimerComptage"
+                            style="-fx-background-color: #e74c3c; -fx-text-fill: white;
+                                   -fx-font-size: 12; -fx-padding: 6 14;
+                                   -fx-background-radius: 6; -fx-cursor: hand;"/>
+
+                    <Separator orientation="VERTICAL"/>
+
+                    <!-- Export Excel -->
+                    <Button text="Télécharger en Excel" onAction="#exporterExcel"
+                            style="-fx-background-color: #1d6f42; -fx-text-fill: white;
+                                   -fx-font-size: 12; -fx-font-weight: bold;
+                                   -fx-padding: 6 14; -fx-background-radius: 6; -fx-cursor: hand;"/>
+
+                    <!-- Export PDF -->
+                    <Button text="Télécharger en PDF" onAction="#exporterPDF"
+                            style="-fx-background-color: #c0392b; -fx-text-fill: white;
+                                   -fx-font-size: 12; -fx-font-weight: bold;
+                                   -fx-padding: 6 14; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                </HBox>
+
+                <!-- Tableau historique -->
+                <TableView fx:id="tableHistorique" VBox.vgrow="ALWAYS"
+                           prefHeight="350"
+                           style="-fx-background-color: white; -fx-border-color: transparent;">
+                    <columns>
+                        <TableColumn fx:id="colHistCategorie" text="CATÉGORIE" prefWidth="220"/>
+                        <TableColumn fx:id="colHistProduit"   text="PRODUIT"   prefWidth="360"/>
+                        <TableColumn fx:id="colHistTotal"     text="TOTAL"     prefWidth="180"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Sélectionnez une date pour voir le comptage"
+                               style="-fx-text-fill: #aaa; -fx-font-size: 13;"/>
+                    </placeholder>
+                </TableView>
+
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

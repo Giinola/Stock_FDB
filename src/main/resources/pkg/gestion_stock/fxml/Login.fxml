@@ -4,6 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="pkg.gestion_stock.controllers.LogiinController"
@@ -13,16 +15,21 @@
     <!-- PARTIE GAUCHE - Image/Branding -->
     <left>
         <VBox alignment="CENTER" prefWidth="400"
-              style="-fx-background-color: #34495e; -fx-padding: 40;">
+              style="-fx-background-color: #000000; -fx-padding: 40;">
 
             <VBox alignment="CENTER" spacing="20">
-                <Text text="📦"
-                      style="-fx-font-size: 80; -fx-fill: white;"/>
+
+                <!-- ✅ LOGO -->
+                <ImageView fitWidth="180" fitHeight="180" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.jpg"/>
+                    </image>
+                </ImageView>
 
                 <Text text="STOCK MANAGER"
                       style="-fx-fill: white; -fx-font-size: 32; -fx-font-weight: bold;"/>
 
-                <Text text="Système de Gestion de Stock"
+                <Text text="AU FEU DE BOIS"
                       style="-fx-fill: #95a5a6; -fx-font-size: 16;"/>
 
                 <Region VBox.vgrow="ALWAYS" minHeight="50"/>
@@ -110,7 +117,7 @@
             <VBox alignment="CENTER" spacing="5">
                 <Text text="Version 1.0"
                       style="-fx-fill: #95a5a6; -fx-font-size: 11;"/>
-                <Text text="© 2025 Stock Manager. Tous droits réservés."
+                <Text text="© 2025 Au Feu De Bois. Tous droits réservés."
                       style="-fx-fill: #95a5a6; -fx-font-size: 11;"/>
             </VBox>
 

@@ -203,6 +203,22 @@ public class StockManager {
         }
     }
 
+    // ✅ AJUSTER LE STOCK (pour inventaire RESTO)
+    public void ajouterAjustement(Produit produit, Double ecart, String motif) {
+        if (produit != null && ecart != 0) {
+            String type = ecart > 0 ? "AJUSTEMENT+" : "AJUSTEMENT-";
+
+            Mouvement mouvement = new Mouvement(type, produit.getNom(), Math.abs(ecart), motif);
+            mouvements.add(0, mouvement);
+
+            // Sauvegarder via DAO
+            produitDAO.mettreAJourQuantite(produit.getCategorie(), produit.getNom(), produit.getQtyInStock());
+            mouvementDAO.sauvegarder(mouvement);
+
+            System.out.println("✅ Ajustement : " + produit.getNom() + " " + (ecart > 0 ? "+" : "") + ecart);
+        }
+    }
+
     public ObservableList<Produit> getProduits() {
         return produits;
     }
@@ -220,6 +236,7 @@ public class StockManager {
         }
         return liste;
     }
+
     public void recharger() {
         chargerDepuisBaseDeDonnees();
     }
